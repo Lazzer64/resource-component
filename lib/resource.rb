@@ -2,13 +2,8 @@ require 'aws-sdk'
 require 'json'
 require 'pp'
 
-ROOT = File.expand_path('..')
-
 class Resource
-  require_relative 'resource/iam'
   require_relative 'resource/diff'
-  require_relative 'resource/lambda'
-  require_relative 'resource/kinesis'
   require_relative 'resource/properties'
   require_relative 'resource/exceptions'
 
@@ -22,7 +17,6 @@ class Resource
     raise MissingProperties if not @desired_properties.valid?(:create)
     raise ResourceAlreadyExists if @desired_properties.valid?(:key) && exists?
     create_resource 
-    output(properties?)
     properties?
   end
 
@@ -40,7 +34,6 @@ class Resource
     diff = get_diff(@current_properties, @desired_properties)
     process_diff(diff)
     # wait_for_modify
-    output(properties?)
     properties?
   end
 
