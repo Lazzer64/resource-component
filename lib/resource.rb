@@ -24,6 +24,7 @@ class Resource
     raise MissingProperties if not @desired_properties.valid?(:key)
     @current_properties = properties?
     delete_resource 
+    @current_properties
   end
 
   def modify
@@ -35,6 +36,18 @@ class Resource
     process_diff(diff)
     # wait_for_modify
     properties?
+  end
+
+  def self.create(props)
+    new(props).create
+  end
+
+  def self.modify(props)
+    new(props).modify
+  end
+
+  def self.delete(props)
+    new(props).delete
   end
 
   private
